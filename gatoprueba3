@@ -1,0 +1,96 @@
+import random
+
+def imprimirtablero(tablero):
+    print("  0 1 2")
+    for i in range(3):
+        print(f"{i} {' '.join(tablero[i])}")
+
+def inicializar_juego(seleccion):
+    juego_en_curso = True
+    if seleccion == "2":
+        jugadores = [[input("Jugador 1: "), "X"], [input("Jugador 2: "), "O"]]
+    else:
+        jugadores = [[input("Jugador 1: "), "X"], ["Computadora", "O"]]
+    jugador_actual = random.randint(0, 1)
+    tablero = [["-" for _ in range(3)] for _ in range(3)]
+    return juego_en_curso, jugadores, jugador_actual, tablero
+
+def actualizar_tablero(jugador, coordenada_fila, coordenada_columna, tablero_actual):
+    tablero_actual[coordenada_fila][coordenada_columna] = jugador[1]
+    return tablero_actual
+
+def tablero_completo(tablero_actual):
+    for linea in tablero_actual:
+        for celda in linea:
+            if celda == '-':
+                return False
+    return True
+
+def comprobar_ganador(jugador, tablero_actual):
+    marca = jugador[1]
+    for i in range(3):
+        if all(tablero_actual[i][j] == marca for j in range(3)):
+            return True
+        if all(tablero_actual[j][i] == marca for j in range(3)):
+            return True
+    if all(tablero_actual[i][i] == marca for i in range(3)):
+        return True
+    if all(tablero_actual[i][2 - i] == marca for i in range(3)):
+        return True
+    return False
+
+def movimiento_jugador(tablero, jugador):
+    while True:
+        try:
+            coordenada_fila, coordenada_columna = map(int, input(f"Jugador {jugador[0]}, elige tus coordenadas (fila columna): ").split())
+            if tablero[coordenada_fila][coordenada_columna] == "-":
+                return coordenada_fila, coordenada_columna
+            else:
+                print("Esa casilla ya está ocupada. Inténtalo de nuevo.")
+        except (ValueError, IndexError):
+            print("Entrada inválida. Introduce dos números del 0 al 2 separados por espacio.")
+
+def movimiento_computadora(tablero, jugador):
+    while True:
+        fila = random.randint(0, 2)
+        columna = random.randint(0, 2)
+        if tablero[fila][columna] == "-":
+            return fila, columna
+
+def juego_gato(seleccion):
+    juego_en_curso, jugadores, jugador_actual, tablero = inicializar_juego(seleccion)
+
+    while juego_en_curso:
+        imprimirtablero(tablero)
+
+        if tablero_completo(tablero):
+            juego_en_curso = False
+            print("Fin del juego, no hay ganador")
+            break
+
+        print(f"Turno de: {jugadores[jugador_actual][0]}")
+
+        if jugadores[jugador_actual][0] == "Computadora":
+            fila, columna = movimiento_computadora(tablero, jugadores[jugador_actual])
+        else:
+            fila, columna = movimiento_jugador(tablero, jugadores[jugador_actual])
+
+        tablero = actualizar_tablero(jugadores[jugador_actual], fila, columna, tablero)
+
+        if comprobar_ganador(jugadores[jugador_actual], tablero):
+            juego_en_curso = False
+            imprimirtablero(tablero)
+            print(f"Ganador: {jugadores[jugador_actual][0]}")
+
+        jugador_actual = 1 if jugador_actual == 0 else 0
+
+print("Seleccione el modo de juego:")
+print("1. jugador 1 Vs Com")
+print("2. P1 VS P2")
+print("3. Salir")
+seleccion = input("Ingrese el número del modo deseado: ")
+
+if seleccion == "3":
+    print("Adiós.")
+else:
+    juego_gato(seleccion)
