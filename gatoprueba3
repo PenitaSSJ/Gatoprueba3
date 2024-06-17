@@ -4,6 +4,7 @@ def imprimirtablero(tablero):
     print("  0 1 2")
     for i in range(3):
         print(f"{i} {' '.join(tablero[i])}")
+#join para unir los elementos de la fila actual con un espacio entre ellos 
 
 def inicializar_juego(seleccion):
     juego_en_curso = True
@@ -38,6 +39,8 @@ def comprobar_ganador(jugador, tablero_actual):
     if all(tablero_actual[i][2 - i] == marca for i in range(3)):
         return True
     return False
+# 2-1 para diagonal secundaria 
+#all comprueba que todas si estan todas las marcas (X o O) este en  columnas, filas y diagonales si se cumple gana el jugador y si no se devuelve 
 
 def movimiento_jugador(tablero, jugador):
     while True:
@@ -49,8 +52,10 @@ def movimiento_jugador(tablero, jugador):
                 print("Esa casilla ya está ocupada. Inténtalo de nuevo.")
         except (ValueError, IndexError):
             print("Entrada inválida. Introduce dos números del 0 al 2 separados por espacio.")
-#valueerror es para cuando el comando map no puede transformar la respuesta del usuario a numeros enteros 
+#Try agarra el codigo que podria tener una execpcion por eso en este codigo uso except
+#valueerror es para cuando el comando map no puede transformar la respuesta del usuario 
 #indexerror es para cuando el usuario da una respuesta fuera de los rangos del tablero debido a que el tablero es de 0 a 2 o los pone de una forma que no es la correcta 
+#split separa la respuesta entre la cordenada y fila 
 
 def movimiento_computadora(tablero, jugador):
     while True:
