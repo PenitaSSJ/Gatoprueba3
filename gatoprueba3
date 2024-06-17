@@ -42,14 +42,16 @@ def comprobar_ganador(jugador, tablero_actual):
 def movimiento_jugador(tablero, jugador):
     while True:
         try:
-            coordenada_fila, coordenada_columna = map(int, input(f"Jugador {jugador[0]}, elige tus coordenadas (fila columna): ").split())
+            coordenada_fila, coordenada_columna = (input(f"Jugador {jugador[0]}, elige tus coordenadas (fila columna): ").split())
             if tablero[coordenada_fila][coordenada_columna] == "-":
                 return coordenada_fila, coordenada_columna
             else:
                 print("Esa casilla ya está ocupada. Inténtalo de nuevo.")
         except (ValueError, IndexError):
             print("Entrada inválida. Introduce dos números del 0 al 2 separados por espacio.")
-
+#valueerror es para cuando el comando map no puede transformar la respuesta del usuario a numeros enteros 
+#indexerror es para cuando el usuario da una respuesta fuera de los rangos del tablero debido a que el tablero es de 0 a 2 o los pone de una forma que no es la correcta 
+#Map(int) la funcion es para que a la respuesta que da el usuario se convierta directamente en un numero entero 
 def movimiento_computadora(tablero, jugador):
     while True:
         fila = random.randint(0, 2)
